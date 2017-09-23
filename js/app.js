@@ -1,17 +1,15 @@
 // jshint esversion:6
 console.log('Sanity Check: The Async Force Episode 1');
 
-
-
-getInstanceNames('http://swapi.co/api/people/4/', 'person4Name', 'name');
-getInstanceNames('http://swapi.co/api/people/4/', 'person4HomeWorld', 'homeworld');
-getInstanceNames('http://swapi.co/api/people/14/', 'person14Name', 'name');
-getInstanceNames('http://swapi.co/api/people/14/', 'person14Species', 'species');
+getCharacterNames('http://swapi.co/api/people/4/', 'person4Name', 'name');
+getCharacterNames('http://swapi.co/api/people/4/', 'person4HomeWorld', 'homeworld');
+getCharacterNames('http://swapi.co/api/people/14/', 'person14Name', 'name');
+getCharacterNames('http://swapi.co/api/people/14/', 'person14Species', 'species');
 
 let filmList = document.getElementById('filmList');
 getMovieData('http://swapi.co/api/films/', 'filmList', 'title', 'planets');
 
-function getInstanceNames (url, id, trait) {
+function getCharacterNames (url, id, trait) {
   let currentId = document.getElementById(id);
   let oReq = new XMLHttpRequest();
   oReq.addEventListener('load', reqListener(id, currentId, trait));
@@ -19,14 +17,13 @@ function getInstanceNames (url, id, trait) {
   oReq.send();
 }
 
-
 function reqListener (id, currentId, trait) {
   return function() { // this is the event handler
     let parsedDocument = JSON.parse(this.responseText);
     let urlRE = /^http/;
-    if (urlRE.test(parsedDocument[trait])) {
-      return getInstanceNames(parsedDocument[trait], id, 'name');
-    } else currentId.innerHTML = parsedDocument[trait];
+    if (urlRE.test(parsedDocument[trait])) 
+      return getCharacterNames(parsedDocument[trait], id, 'name');
+    else currentId.innerHTML = parsedDocument[trait];
   };
 }
 
@@ -48,16 +45,16 @@ function movieListListener (id, currentId, traitOne, traitTwo) {
       filmBullet.className = traitOne;
       filmBullet.innerHTML = filmData[i][traitOne];
       filmList.appendChild(filmBullet);
-      
-      let filmPlanets = document.createElement('ul');
-      filmPlanets.className = 'filmPlanets';
-      filmBullet.appendChild(filmPlanets);
 
-      let traitTwoList = filmData[i][traitTwo];
+      if (traitTwo === 'planets') {
+        let filmPlanets = document.createElement('ul');
+        filmPlanets.className = 'filmPlanets';
+        filmBullet.appendChild(filmPlanets);
 
-      if (traitTwo) {
-        for (let j = 0; j < traitTwoList.length; j++) {
-          getMovieNames(traitTwoList[j], filmPlanets, 'name');
+        let traitTwoList = filmData[i][traitTwo];
+        
+        for (let j = 0; j < filmData[i][traitTwo].length; j++) {
+          getMovieNames(filmData[i][traitTwo][j], filmPlanets, 'name');
         }
       }
     }
