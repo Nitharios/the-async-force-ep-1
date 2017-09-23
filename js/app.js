@@ -9,7 +9,7 @@ getCharacterNames('http://swapi.co/api/people/14/', 'person14Species', 'species'
 let filmList = document.getElementById('filmList');
 getMovieData('http://swapi.co/api/films/', 'filmList', 'title', 'planets');
 
-function getCharacterNames (url, id, trait) {
+function getCharacterNames(url, id, trait) {
   let currentId = document.getElementById(id);
   let oReq = new XMLHttpRequest();
   oReq.addEventListener('load', reqListener(id, currentId, trait));
@@ -17,7 +17,7 @@ function getCharacterNames (url, id, trait) {
   oReq.send();
 }
 
-function reqListener (id, currentId, trait) {
+function reqListener(id, currentId, trait) {
   return function() { // this is the event handler
     let parsedDocument = JSON.parse(this.responseText);
     let urlRE = /^http/;
@@ -35,7 +35,7 @@ function getMovieData(url, id, traitOne, traitTwo) {
   oReq.send();
 }
 
-function movieListListener (id, currentId, traitOne, traitTwo) {
+function movieListListener(id, currentId, traitOne, traitTwo) {
   return function() { // this is the event handler
     let filmData = JSON.parse(this.responseText).results;
     let urlRE = /^http/;
@@ -53,28 +53,27 @@ function movieListListener (id, currentId, traitOne, traitTwo) {
 
         let traitTwoList = filmData[i][traitTwo];
         
-        for (let j = 0; j < filmData[i][traitTwo].length; j++) {
-          getMovieNames(filmData[i][traitTwo][j], filmPlanets, 'name');
+        for (let j = 0; j < traitTwoList.length; j++) {
+          getMovieNames(traitTwoList[j], filmPlanets, 'name');
         }
       }
     }
   };
 }
 
-function getMovieNames (url, newClass, trait) {
-  let currentClass = document.getElementsByClassName(newClass);
+function getMovieNames(url, currentClass, trait) {
   let oReq = new XMLHttpRequest();
-  oReq.addEventListener('load', planetNames(newClass, currentClass, trait));
+  oReq.addEventListener('load', getPlanetNames(currentClass, trait));
   oReq.open("GET", url);
   oReq.send(); 
 }
 
-function planetNames (newClass, currentClass, trait) {
+function getPlanetNames(currentClass, trait) {
   return function() {
     let parsedDocument = JSON.parse(this.responseText);
     let planetBullet = document.createElement('li');
     planetBullet.className = 'planetName';
     planetBullet.innerHTML = parsedDocument[trait];
-    newClass.appendChild(planetBullet);
+    currentClass.appendChild(planetBullet);
   };
 }
