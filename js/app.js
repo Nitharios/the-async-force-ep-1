@@ -25,28 +25,27 @@ getInstanceNames('http://swapi.co/api/people/4/', 'person4HomeWorld', 'homeworld
 getInstanceNames('http://swapi.co/api/people/14/', 'person14Name', 'name');
 getInstanceNames('http://swapi.co/api/people/14/', 'person14Species', 'species');
 
-function generateLists(url, id, trait) {
+
+function generateLists(url, id, traitOne, traitTwo) {
  let currentId = document.getElementById(id);
  let oReq = new XMLHttpRequest();
- oReq.addEventListener('load', reqListListener(id, currentId, trait));
+ oReq.addEventListener('load', reqListListener(id, currentId, traitOne, traitTwo));
  oReq.open("GET", url);  
  oReq.send();
 }
 
-function reqListListener (id, currentId, trait) {
+function reqListListener (id, currentId, traitOne, traitTwo) {
   return function() { // this is the event handler
-    let parsedDocument = JSON.parse(this.responseText);
-    parsedDocument = parsedDocument.results;
-    console.log(parsedDocument);
+    let films = JSON.parse(this.responseText).results;
     let urlRE = /^http/;
-    if (urlRE.test(parsedDocument[trait])) {
-      return getInstanceNames(parsedDocument[trait], id, 'title');
-    } else {
-      for (let i = 0; i < parsedDocument.length; i++) {
-        currentId.innerHTML = parsedDocument[i][trait];
-      }
+    
+    for (let i = 0; i < films.length; i++) {
+      let filmBullet = document.createElement('li');
+      filmBullet.innerHTML = films[i][traitOne];
+      filmList.appendChild(filmBullet);
     }
   };
 }
 
-generateLists('http://swapi.co/api/films/', 'filmList', 'title');
+let filmList = document.getElementById('filmList');
+generateLists('http://swapi.co/api/films/', 'filmList', 'title', 'planets');
