@@ -1,13 +1,17 @@
 // jshint esversion:6
-console.log('Sanity Check: The Async Force');
+console.log('Sanity Check: The Async Force Episode 1');
 
-let personReq = new XMLHttpRequest();
+let personFour = document.getElementById("person4Name");
+
+let oReq = new XMLHttpRequest();
+oReq.addEventListener('load', reqListener);
+oReq.open("GET", "http://swapi.co/api/people/4/");
+oReq.send();
 
 function reqListener() {
-  console.log(this.statusText);
+  var personFourParsed = JSON.parse(this.responseText);
+  console.log(this.responseText);
+  personFour.innerHTML = personFourParsed.name;
 }
 
-personReq.addEventListener("load", personReq);
 
-personReq.open("GET", "http://swapi.co/api/people/4/");
-personReq.send();
