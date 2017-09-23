@@ -42,9 +42,8 @@ function reqListListener (id, currentId, trait) {
     if (urlRE.test(parsedDocument[trait])) {
       return getInstanceNames(parsedDocument[trait], id, 'title');
     } else {
-      let titleList = parsedDocument[trait];
-      for (let i = 0; i < titleList.length; i++) {
-        currentId.innerHTML = parsedDocument[trait];
+      for (let i = 0; i < parsedDocument.length; i++) {
+        currentId.innerHTML = parsedDocument[i][trait];
       }
     }
   };
