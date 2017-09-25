@@ -1,13 +1,13 @@
 // jshint esversion:6
 console.log('Sanity Check: The Async Force Episode 1');
 
-getCharacterNames('http://swapi.co/api/people/4/', 'person4Name', 'name');
-getCharacterNames('http://swapi.co/api/people/4/', 'person4HomeWorld', 'homeworld');
-getCharacterNames('http://swapi.co/api/people/14/', 'person14Name', 'name');
-getCharacterNames('http://swapi.co/api/people/14/', 'person14Species', 'species');
+getCharacterNames('https://swapi.co/api/people/4/', 'person4Name', 'name');
+getCharacterNames('https://swapi.co/api/people/4/', 'person4HomeWorld', 'homeworld');
+getCharacterNames('https://swapi.co/api/people/14/', 'person14Name', 'name');
+getCharacterNames('https://swapi.co/api/people/14/', 'person14Species', 'species');
 
 let filmList = document.getElementById('filmList');
-getMovieData('http://swapi.co/api/films/', 'filmList', 'title', 'planets');
+getMovieData('https://swapi.co/api/films/', 'filmList', 'title', 'planets');
 
 // First function called that takes in the URL, id of DOM element to affect, and the trait the user wants returned
 function getCharacterNames(url, id, trait) {
@@ -26,8 +26,8 @@ function getCharacterNames(url, id, trait) {
 function reqListener(id, currentId, trait) {
   return function() { // this is the event handler
     let parsedDocument = JSON.parse(this.responseText);
-    let urlRE = /^http/;
-    // tests if the document returned contains an http link at a specific trait
+    let urlRE = /^https/;
+    // tests if the document returned contains an https link at a specific trait
     if (urlRE.test(parsedDocument[trait])) 
       // if true, will re-run character names --> recursion 
       return getCharacterNames(parsedDocument[trait], id, 'name');
@@ -46,7 +46,7 @@ function getMovieData(url, id, traitOne, traitTwo) {
 function movieListListener(id, currentId, traitOne, traitTwo) {
   return function() { // this is the event handler
     let filmData = JSON.parse(this.responseText).results;
-    let urlRE = /^http/;
+    let urlRE = /^https/;
     
     for (let i = 0; i < filmData.length; i++) {
       let filmBullet = document.createElement('li');
